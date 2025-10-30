@@ -1,9 +1,8 @@
-from datetime import datetime, date, timezone
+from datetime import datetime, date
 from typing import Optional, TYPE_CHECKING
 from sqlmodel import SQLModel, Field, Relationship
 from decimal import Decimal
-from sqlalchemy import CheckConstraint, Index, Column as SAColumn, ForeignKey, String, Text
-from sqlalchemy.sql import text
+from sqlalchemy import Index, Column as SAColumn, ForeignKey, String, Text
 
 if TYPE_CHECKING:
     from models.product import Product
