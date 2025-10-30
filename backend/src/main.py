@@ -5,6 +5,9 @@ from fastapi import FastAPI, Depends, HTTPException
 from contextlib import asynccontextmanager
 from typing import Annotated
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import sys
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from config.settings import settings
 
