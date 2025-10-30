@@ -1,8 +1,10 @@
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import SQLModel, Field, Relationship
 
-from models.food_entry import FoodEntry
+if TYPE_CHECKING:
+    from models.food_entry import FoodEntry
+    from models.user_favorites import UserFavorite
 
 # ---------------------------
 # Users Table
@@ -18,3 +20,4 @@ class User(SQLModel, table=True):
 
     # Relationships
     food_entries: List["FoodEntry"] = Relationship(back_populates="user")
+    user_favorites: List["UserFavorite"] = Relationship(back_populates="user")
