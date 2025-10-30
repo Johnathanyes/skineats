@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from typing import Annotated
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from config.settings import settings # Import our settings
+from config.settings import settings
 
 # Global variable to hold the firestore client
 db: firestore.Client
