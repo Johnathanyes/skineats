@@ -1,24 +1,22 @@
 import os
-import firebase_admin
-from firebase_admin import credentials, firestore, auth
-from fastapi import FastAPI, Depends, HTTPException
+import sys
 from contextlib import asynccontextmanager
 from typing import Annotated
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import sys
+
+import firebase_admin
+from firebase_admin import credentials
+from fastapi import FastAPI, Depends
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from config.settings import settings
+from routers.auth_router import router as auth_router
+from auth.auth import get_current_user
 
-# Global variable to hold the firestore client
-db: firestore.Client
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # --- Startup ---
-    global db
-    
     cred_options = {}
     
     # VERCEL DEPLOYMENT WORKFLOW
@@ -60,46 +58,17 @@ async def lifespan(app: FastAPI):
     try:
         firebase_admin.initialize_app(cred, options={
             'projectId': settings.firebase_project_id,
-            'databaseURL': settings.firebase_database_url
         })
         print(f"Firebase App initialized for project: {settings.firebase_project_id}")
     except ValueError as e:
         # This can happen if the app is reloaded
         print(f"Firebase App already initialized: {e}")
-
-    # Initialize the Firestore client
-    db = firestore.client()
-    
     yield
     # --- Shutdown ---
     pass
 
 app = FastAPI(lifespan=lifespan)
-
-# --- Dependency Injection ---
-def get_db() -> firestore.Client:
-    return db
-
-bearer_scheme = HTTPBearer()
-
-def get_current_user(
-    creds: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]
-) -> dict:
-    if not creds:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid authorization credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    try:
-        decoded_token = auth.verify_id_token(creds.credentials)
-        return decoded_token
-    except Exception as e:
-        raise HTTPException(
-            status_code=401,
-            detail=f"Invalid ID token: {e}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+app.include_router(auth_router)
 
 # --- Example Endpoints ---
 
@@ -107,24 +76,9 @@ def get_current_user(
 async def root():
     return {"message": f"Hello from Firebase project: {settings.firebase_project_id}"}
 
-@app.get("/items/{item_id}")
-async def get_item(
-    item_id: str, 
-    db_client: Annotated[firestore.Client, Depends(get_db)]
-):
-    doc_ref = db_client.collection("items").document(item_id)
-    doc = await doc_ref.get()
-    
-    if not doc.exists:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return doc.to_dict()
-
 @app.get("/me")
-async def get_protected_data(
-    user: Annotated[dict, Depends(get_current_user)]
-):
+async def me(user: Annotated[dict, Depends(get_current_user)]):
     return {
-        "message": "This is protected data!",
         "user_id": user.get("uid"),
         "email": user.get("email"),
     }
