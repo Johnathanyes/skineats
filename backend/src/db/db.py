@@ -25,14 +25,22 @@ def _to_async_url(url: str) -> str:
 ASYNC_DATABASE_URL = _to_async_url(DATABASE_URL)
 IS_VERCEL = bool(os.getenv("VERCEL"))
 
+engine_kwargs = {
+    "echo": False,
+    "future": True,
+    "pool_pre_ping": True,
+}
+
+if IS_VERCEL:
+    # NullPool doesn't accept pool_size/max_overflow
+    engine_kwargs["poolclass"] = NullPool
+else:
+    engine_kwargs["pool_size"] = 1
+    engine_kwargs["max_overflow"] = 0
+
 engine = create_async_engine(
     ASYNC_DATABASE_URL,
-    echo=False,
-    future=True,
-    pool_pre_ping=True,
-    poolclass=NullPool if IS_VERCEL else None,
-    pool_size=None if IS_VERCEL else 1,
-    max_overflow=None if IS_VERCEL else 0,
+    **engine_kwargs,
 )
 
 AsyncSessionLocal = sessionmaker(
