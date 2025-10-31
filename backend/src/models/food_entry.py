@@ -38,7 +38,7 @@ class FoodEntry(SQLModel, table=True):
 
     custom_food_name: Optional[str] = Field(default=None, max_length=255)
     notes: Optional[str] = Field(default=None)
-    created_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
 
     # Relationships
     user: "User" = Relationship(back_populates="food_entries")

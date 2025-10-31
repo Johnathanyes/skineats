@@ -15,8 +15,8 @@ class User(SQLModel, table=True):
     id: str = Field(primary_key=True, max_length=128)  # Firebase UID
     email: str = Field(unique=True, index=True, nullable=False, max_length=255)
     display_name: Optional[str] = Field(default=None, max_length=100)
-    created_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
-    updated_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=datetime.now(timezone.utc))
 
     # Relationships
     food_entries: List["FoodEntry"] = Relationship(back_populates="user")

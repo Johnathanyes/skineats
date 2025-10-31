@@ -52,8 +52,8 @@ class Product(SQLModel, table=True):
     # Metadata
     image_url: Optional[str] = None
     data_source: Optional[str] = Field(default=None, max_length=20)
-    created_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
-    updated_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=datetime.now(timezone.utc))
 
     # Relationships
     food_entries: List["FoodEntry"] = Relationship(back_populates="product")

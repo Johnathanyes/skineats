@@ -22,8 +22,8 @@ class UserFavorite(SQLModel, table=True):
 
     usage_count: int = Field(default=0)
 
-    last_used: datetime = Field(default_factory=datetime.now(timezone.UTC))
-    created_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
+    last_used: datetime = Field(default_factory=datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
 
     user: "User" = Relationship(back_populates="user_favorites")
     product: Optional["Product"] = Relationship(back_populates="favorites")
