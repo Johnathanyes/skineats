@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, TYPE_CHECKING
 from sqlmodel import SQLModel, Field, Relationship
-from sqlalchemy import UniqueConstraint, CheckConstraint, Index, Column as SAColumn, ForeignKey, String
+from sqlalchemy import UniqueConstraint, Index, Column as SAColumn, ForeignKey, String
 
 if TYPE_CHECKING:
     from models.product import Product
@@ -22,8 +22,8 @@ class UserFavorite(SQLModel, table=True):
 
     usage_count: int = Field(default=0)
 
-    last_used: datetime = Field(default_factory=datetime.now(datetime.UTC))
-    created_at: datetime = Field(default_factory=datetime.now(datetime.UTC))
+    last_used: datetime = Field(default_factory=datetime.now(timezone.UTC))
+    created_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
 
     user: "User" = Relationship(back_populates="user_favorites")
     product: Optional["Product"] = Relationship(back_populates="favorites")

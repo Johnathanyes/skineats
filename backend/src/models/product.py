@@ -1,9 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any, TYPE_CHECKING
 from decimal import Decimal
 from sqlmodel import SQLModel, Field, Relationship
-from sqlalchemy import Index, Column as SAColumn, String, Integer, Numeric, Text
-from sqlalchemy.sql import text
+from sqlalchemy import Index, Column as SAColumn, Text
 from sqlalchemy.dialects.postgresql import ARRAY as PG_ARRAY, JSONB
 
 if TYPE_CHECKING:
@@ -53,8 +52,8 @@ class Product(SQLModel, table=True):
     # Metadata
     image_url: Optional[str] = None
     data_source: Optional[str] = Field(default=None, max_length=20)
-    created_at: datetime = Field(default_factory=datetime.now(datetime.UTC))
-    updated_at: datetime = Field(default_factory=datetime.now(datetime.UTC))
+    created_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
+    updated_at: datetime = Field(default_factory=datetime.now(timezone.UTC))
 
     # Relationships
     food_entries: List["FoodEntry"] = Relationship(back_populates="product")
