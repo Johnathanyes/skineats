@@ -32,7 +32,6 @@ engine_kwargs = {
 }
 
 if IS_VERCEL:
-    # NullPool doesn't accept pool_size/max_overflow
     engine_kwargs["poolclass"] = NullPool
 else:
     engine_kwargs["pool_size"] = 1

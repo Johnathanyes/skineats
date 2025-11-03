@@ -8,9 +8,6 @@ if TYPE_CHECKING:
     from models.product import Product
     from models.user import User
 
-# ---------------------------
-# Food Diary Entries
-# ---------------------------
 class FoodEntry(SQLModel, table=True):
     __tablename__ = "food_entries"
 
@@ -28,7 +25,6 @@ class FoodEntry(SQLModel, table=True):
     meal_type: Optional[str] = Field(default=None, max_length=20)
     servings: Decimal = Field(default=Decimal("1.0"))
 
-    # Snapshot nutrition
     calories: Optional[Decimal] = None
     protein_g: Optional[Decimal] = None
     carbs_g: Optional[Decimal] = None

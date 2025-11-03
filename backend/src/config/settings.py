@@ -9,13 +9,13 @@ class Settings(BaseSettings):
     environment_type: str = os.getenv("ENVIRONMENT_TYPE", "development")
     
     # --- For Development (reading from .env file) ---
-    google_application_credentials: str | None = None
+    open_food_facts_api_url: str
 
     # --- For Production (Vercel) ---
     # These will be read from Vercel's environment variables
-    firebase_project_id: str = "mangosteen"
-    firebase_client_email: str | None = None
-    firebase_private_key: str | None = None
+    firebase_project_id: str
+    firebase_client_email: str
+    firebase_private_key: str
     
     # Model config to load from a .env file for local dev
     model_config = SettingsConfigDict(

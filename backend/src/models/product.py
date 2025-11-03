@@ -21,18 +21,15 @@ class Product(SQLModel, table=True):
         default=None, sa_column=SAColumn(PG_ARRAY(Text()))
     )
 
-    serving_size_g: Optional[Decimal] = Field(default=None)
-    serving_size_unit: Optional[str] = Field(default=None, max_length=20)
-
     # Nutrition
-    calories: Optional[Decimal] = None
-    protein_g: Optional[Decimal] = None
-    carbs_g: Optional[Decimal] = None
-    sugar_g: Optional[Decimal] = None
-    fiber_g: Optional[Decimal] = None
-    fat_g: Optional[Decimal] = None
-    saturated_fat_g: Optional[Decimal] = None
-    sodium_mg: Optional[Decimal] = None
+    kcalories_100g: Optional[Decimal] = None
+    protein_100g: Optional[Decimal] = None
+    carbs_100g: Optional[Decimal] = None
+    sugar_100g: Optional[Decimal] = None
+    fiber_100g: Optional[Decimal] = None
+    fat_100g: Optional[Decimal] = None
+    saturated_fat_100g: Optional[Decimal] = None
+    sodium_100g: Optional[Decimal] = None
 
     skin_score: Optional[int] = None
     skin_score_breakdown: Optional[List[Dict[str, Any]]] = Field(
@@ -40,18 +37,18 @@ class Product(SQLModel, table=True):
     )
 
     # Ingredient & processing data
-    ingredients_text: Optional[str] = None
-    ingredients_parsed: Optional[List[Dict[str, Any]]] = Field(
+    ingredient_list: Optional[List[Dict[str, str]]] = Field(
         default=None, sa_column=SAColumn(JSONB)
     )
     nova_group: Optional[int] = None
-    allergens: Optional[List[str]] = Field(
+    ecoscore: Optional[str]
+    allergen_tags: Optional[List[str]] = Field(
         default=None, sa_column=SAColumn(PG_ARRAY(Text()))
     )
+    labels_tag: Optional[List[str]]
 
     # Metadata
     image_url: Optional[str] = None
-    data_source: Optional[str] = Field(default=None, max_length=20)
     created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=datetime.now(timezone.utc))
 
