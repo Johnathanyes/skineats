@@ -41,11 +41,13 @@ class Product(SQLModel, table=True):
         default=None, sa_column=SAColumn(JSONB)
     )
     nova_group: Optional[int] = None
-    ecoscore: Optional[str]
+    ecoscore: Optional[str] = None
     allergen_tags: Optional[List[str]] = Field(
         default=None, sa_column=SAColumn(PG_ARRAY(Text()))
     )
-    labels_tag: Optional[List[str]]
+    labels_tag: Optional[List[str]] = Field(
+        default=None, sa_column=SAColumn(PG_ARRAY(Text()))
+    )
 
     # Metadata
     image_url: Optional[str] = None

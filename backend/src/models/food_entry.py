@@ -20,8 +20,6 @@ class FoodEntry(SQLModel, table=True):
         sa_column=SAColumn(String(50), ForeignKey("products.barcode"), nullable=False),
     )
 
-    entry_date: date = Field(nullable=False)
-    timezone: str = Field(default="UTC", max_length=50)
     meal_type: Optional[str] = Field(default=None, max_length=20)
     servings: Decimal = Field(default=Decimal("1.0"))
 
@@ -38,7 +36,7 @@ class FoodEntry(SQLModel, table=True):
 
     # Relationships
     user: "User" = Relationship(back_populates="food_entries")
-    product: Optional["Product"] = Relationship(back_populates="food_entries")
+    product: "Product" = Relationship(back_populates="food_entries")
 
     __table_args__ = (
         Index("idx_food_entries_user_date", "user_id", "entry_date", postgresql_using=None, postgresql_ops=None),

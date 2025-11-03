@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel
-from typing import Optional, Decimal, List, Dict, Any
+from typing import Optional, List, Dict, Any
+from decimal import Decimal
 from datetime import datetime
 
 class ProductResponse(SQLModel):

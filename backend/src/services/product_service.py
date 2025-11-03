@@ -43,32 +43,3 @@ class ProductService:
         logger.info(f"Product saved to database: {barcode}")
         return product
     
-    def search_products(
-        self, 
-        query: str, 
-        limit: int = 20, 
-        offset: int = 0
-    ) -> list[Product]:
-        """
-        Search products by name or brand
-        
-        Args:
-            query: Search query
-            limit: Maximum results to return
-            offset: Pagination offset
-            
-        Returns:
-            List of matching products
-        """
-        statement = (
-            select(Product)
-            .where(
-                (Product.name.ilike(f"%{query}%")) | 
-                (Product.brand.ilike(f"%{query}%"))
-            )
-            .offset(offset)
-            .limit(limit)
-        )
-        
-        products = self.db.exec(statement).all()
-        return list(products)
